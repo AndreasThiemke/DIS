@@ -12,3 +12,6 @@ HOW TO RUN:
 HOW TO USE:
 - Sign up via the button in the top left corner
 - Write your notes :)
+
+
+You can see the database under instance/database.db
