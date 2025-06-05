@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h1 align="center">Notes</h1>
+
+<!-- Add New Note Form Above the List) -->
+<div style="margin-bottom: 30px;">
+  <form method="POST">
+    <textarea name="note" id="note" class="form-control" placeholder="Enter your note here..."></textarea>
+    <br />
+    <div align="center">
+      <button type="submit" class="btn btn-primary">Add Note</button>
+    </div>
+  </form>
+</div>
+
+<ul class="list-group list-group-flush" id="notes">
+  {% for note in user.notes|reverse %}
+  <li class="list-group-item" style="padding: 0; margin-bottom: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+
+    <!-- Colorful Top Bar -->
+    <div style="height: 8px; background-color: #00bcd4; border-top-left-radius: 6px; border-top-right-radius: 6px;"></div>
+
+    <!-- Buttons Container -->
+    <div style="display: flex; justify-content: flex-end; padding: 10px 16px 0 16px; gap: 10px;">
+      <button type="button" class="btn btn-sm btn-outline-primary" onclick="toggleEdit({{ note.id }})">Edit</button>
+      <button type="button" class="close" onClick="deleteNote({{ note.id }})" style="font-size: 1.2rem;">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <!-- Note Text / Edit Form Container -->
+    <div style="padding: 10px 16px 20px 16px;">
+      <!-- Displayed Note -->
+      <div id="note-display-{{ note.id }}" style="white-space: pre-wrap; word-wrap: break-word; max-height: 300px; overflow-y: auto; margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 5px; padding: 10px;">
+        {{ note.data }}
+      </div>
+
+      <!-- Hidden Edit Form -->
+      <form method="POST" action="/edit-note/{{ note.id }}" style="display: none;" id="edit-form-{{ note.id }}">
+        <textarea name="note" class="form-control">{{ note.data }}</textarea>
+        <div class="mt-2" style="display: flex; gap: 10px;">
+          <button type="submit" class="btn btn-sm btn-success">Save</button>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="toggleEdit({{ note.id }})">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+  </li>
+  {% endfor %}
+</ul>
+
+<script>
+  function toggleEdit(noteId) {
+    const display = document.getElementById(`note-display-${noteId}`);
+    const form = document.getElementById(`edit-form-${noteId}`);
+    if (form.style.display === "none") {
+      form.style.display = "block";
+      display.style.display = "none";
+    } else {
+      form.style.display = "none";
+      display.style.display = "block";
+    }
+  }
+</script>
+{% endblock %}
